@@ -166,6 +166,21 @@ namespace Homework8
             }
         } */
 
+        public void RandomItem()
+        {
+            Random rnd = new Random();
+            var count = this.Count();
+            if (count == 0)
+            {
+                return;
+            }
+            for (int i = 0; i < rnd.Next(0, count - 1); i++)
+            {
+                node = node.Next;
+            }
+            Console.WriteLine(node.Value);
+        }
+
         public override string ToString()
         {
             var nodeTemp = node;
@@ -202,6 +217,7 @@ namespace Homework8
             // Console.WriteLine(lst.ToString());
             lst.Reverse();
             Console.WriteLine(lst.ToString());
+            lst.RandomItem();
         }
     }
 }
