@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Runtime.ExceptionServices;
 
 namespace Homework8
@@ -18,25 +19,22 @@ namespace Homework8
             }
         }
         private Node node;
-        public AgileLinkedList(params T[] values)
+        public AgileLinkedList(IEnumerable<T> values)
         {
-            if (values.Length == 0)
+            if (values.Count() == 0)
             {
                 node = null;
                 return;
             }
             var nodeTemp = new Node(values.First(), null, null);
-            var c = 0;
-            for (int i = 1; i < values.Length; i++)
+            foreach (var value in values.Skip(1))
             {
-                nodeTemp.Next = new Node(values[i], nodeTemp, null);
+                nodeTemp.Next = new Node(value, nodeTemp, null);
                 nodeTemp = nodeTemp.Next;
-                c++;
             }
-            while (c > 0)
+            while (nodeTemp.Prev != null)
             {
                 nodeTemp = nodeTemp.Prev;
-                c--;
             }
             node = nodeTemp;
         }
@@ -67,6 +65,23 @@ namespace Homework8
             }
             return c;
         }
+        public void AddFirst(T value)
+        {
+            node.Prev = new Node(value, null, node);
+            node = node.Prev;
+        }
+        public void AddLast(T value)
+        {
+            while (node.Next != null)
+            {
+                node = node.Next;
+            }
+            node.Next = new Node(value, node, null);
+            while (node.Prev != null)
+            {
+                node = node.Prev;
+            }
+        }
         public override string ToString()
         {
             var nodeTemp = node;
@@ -88,10 +103,13 @@ namespace Homework8
     {
         static void Main(string[] args)
         {
-            var root = new AgileLinkedList<int>(1, 2, 3, 4, 5);
-            Console.WriteLine(root.ToString());
-            Console.WriteLine(root.Last()?.Value);
-            Console.WriteLine(root.Count());
+            var lst = new AgileLinkedList<int>(new List<int> { 1, 2, 3, 4, 5 });
+            Console.WriteLine(lst.ToString());
+            Console.WriteLine(lst.Last()?.Value);
+            Console.WriteLine(lst.Count());
+            lst.AddFirst(0);
+            lst.AddLast(6);
+            Console.WriteLine(lst.ToString());
         }
     }
 }
